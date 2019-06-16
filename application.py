@@ -1,5 +1,5 @@
 """Cloud Foundry test"""
-from flask import Flask
+from flask import Flask,render_template
 import os
 import sqlite3
 
@@ -13,10 +13,10 @@ def hello_world():
     con = sqlite3.connect("quakes")
     con.row_factory = sqlite3.Row
     cur = con.cursor()
-    cur.execute("select count(*) from quakes")
+    cur.execute("select (count(*)) as count from all_month")
     rows = cur.fetchall()
     return render_template('home.html',rows=rows)
 
 
 if __name__ == '__main__':
-    app.run (port=port)
+    app.run (port=port,debug=True)
