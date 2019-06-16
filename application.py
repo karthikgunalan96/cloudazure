@@ -9,7 +9,7 @@ port = int(os.getenv("PORT", 5000))
 
 @app.route('/')
 def hello_world():
-    return 'Hello azure!'
+    return 'Hello world!'
 
 if __name__ == '__main__':
     app.run (port=port)
