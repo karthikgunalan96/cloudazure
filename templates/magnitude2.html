@@ -1,37 +1,27 @@
 <h1>id:1001616138 name:Gunalan,Karthik</h1>
+retrieved from memcache<br>
 <table>
     <tr>
         <th>time</th>
         <th>latitude</th>
         <th>longitude</th>
-        <th>depth</th>
         <th>mag</th>
-        <th>magType</th>
-        <th>nst</th>
-        <th>gap</th>
-        <th>dmin</th>
-        <th>rms</th>
-        <th>net</th>
-        <th>id</th>
-        <th>updated</th>
-        <th>place</th>
-        <th>type</th>
-        <th>horizontalError</th>
-        <th>depthError</th>
-        <th>magError</th>
-        <th>magNst</th>
-        <th>status</th>
-        <th>locationSource</th>
-        <th>magSource</th>
-
+        
     </tr>
     {% for row in rows %}
         <tr>
             <td>
-                {{row}}
-
+                {{row['time']}}
             </td>
-           
+            <td>
+                {{row['latitude']}}
+            </td>
+            <td>
+                {{row['longitude']}}
+            </td>
+            <td>
+                {{row['mag']}}
+            </td>
 
         </tr>
 
