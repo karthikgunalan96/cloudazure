@@ -97,4 +97,4 @@ def mag():
 
 
 if __name__ == '__main__':
-    app.run (port=port,debug=True)
+    app.run (host='0.0.0.0',port=port,debug=True)
