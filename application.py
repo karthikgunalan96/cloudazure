@@ -51,7 +51,7 @@ def mag():
         print("retrieved from database")
         con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
         cur = con.cursor()
-        query="select * from all_month where mag > "+mag
+        query="select time,latitude,longitude,mag from all_month where mag > "+mag
         memhash = hashlib.sha256(query.encode()).hexdigest()
         cur.execute(query)
         rows= list(cur.fetchall())
@@ -60,7 +60,6 @@ def mag():
         
         for row in rows:
             memdict=dict()
-            mem=[(0,row[0]),(1,row[1]),(2,row[2]),(3,row[4])]
             # print(mem)
             for j,val in mem:
                 memdict[columns[j]]=val
