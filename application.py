@@ -4,7 +4,7 @@ import os
 import sqlite3
 import time
 import pyodbc
-from pymemcache.client import base
+# from pymemcache.client import base
 
 app = Flask(__name__)
 
