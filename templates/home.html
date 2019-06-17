@@ -1,8 +1,5 @@
-<table>
-{% for row in rows %}
-
-<tr>
-   <td>{{row["count"]}}</td>
-</tr>
-{% endfor %}
-</table>
+<h2>search in magnitude</h2><br>
+        <form action="/magnitude" method="POST" >
+            Enter magnitude: <input type="text" name="mag">
+            <input type="submit" value="Search">
+         </form>
