@@ -25,13 +25,13 @@ def mag():
     # if result is None:
     start=time.time()
     print("retrieved from database")
-    con = pyodbc.connect("Driver={ODBC Driver 13 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
-    con.row_factory = sqlite3.Row
+    con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    
     cur = con.cursor()
     cur.execute("select * from all_month where mag > ?",(mag,))
     rows = cur.fetchall()
     print(rows)
-    client.set(mag,rows)
+    # client.set(mag,rows)
     end=time.time()
     print('Time Taken')
     print(end-start)
@@ -44,4 +44,4 @@ def mag():
 
 
 if __name__ == '__main__':
-    app.run (host='0.0.0.0',port=port,debug=True)
+    app.run (port=port,debug=True)
