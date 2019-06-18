@@ -120,12 +120,13 @@ def randomqueries():
                     
     probability_of_occurence_in_db=countwithindb/a
     probability_of_occurence_in_cache=countwithincache/a
-    print("probability of query hitting db=",probability_of_occurence_in_db)
-    print("probability of query hitting cache=",probability_of_occurence_in_cache)
+    # print("probability of query hitting db=",probability_of_occurence_in_db)
+    # print("probability of query hitting cache=",probability_of_occurence_in_cache)
         # return render_template('magnitude2.html',rows=result,time=endmem-startmem)
-
+    sum_dbtime=sum(execution_of_time_in_db)
+    sum_cachetime=sum(execution_of_time_in_cache)
     con.close()
-    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=execution_of_time_in_db,timecache=execution_of_time_in_cache)
+    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=sum_dbtime,timecache=sum_cachetime)
 
 
 
