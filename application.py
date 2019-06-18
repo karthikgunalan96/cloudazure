@@ -65,8 +65,9 @@ def randomqueries():
     countwithincache=0
     countwithindb=0
     columns = ['time', 'latitude', 'longitude','mag']
+    execution_of_time_in_db=[]
+    execution_of_time_in_cache=[]
 
-    
     val=float(minmag)
     interval=[]
     interval.append(minmag)
@@ -85,6 +86,7 @@ def randomqueries():
             startmem=time.time()
             result = r.get(query)
             endmem=time.time()
+            execution_of_time_in_cache.append(endmem-startmem)
             if result is None:
                 print('in db')
                 start=time.time()
@@ -92,7 +94,9 @@ def randomqueries():
                 cur.execute(query)
                 rows=list(cur.fetchall())
                 end=time.time()
+                execution_of_time_in_db.append(end-start)
                 mem=[]
+
                 for row in rows:
                     memdict=dict()
                     for j,val in enumerate(row):
@@ -116,7 +120,7 @@ def randomqueries():
         # return render_template('magnitude2.html',rows=result,time=endmem-startmem)
 
     
-    return render_template('randomqueries.html')
+    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=execution_of_time_in_db,timecache=execution_of_time_in_cache)
 
 
 

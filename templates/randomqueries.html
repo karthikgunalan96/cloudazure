@@ -1,3 +1,12 @@
 <h1>id:1001616138 name:Gunalan,Karthik</h1>
 retrieved from memcache<br>
-elapsed time for query execution = {{time}}<br>
+
+probability of query executing for the first time to fetch query from db={{probdb}}<br>
+probability of query executing for the first time to fetch query from cache={{probcache}}<br>
+{% for i in timedb %}
+time for  query executing for the first time to fetch query from db={{i}}<br>
+{% endfor %}
+
+{% for i in timedb %}
+time for query executing for the first time to fetch query from cache={{timecache}}<br>
+{% endfor %}
