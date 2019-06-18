@@ -78,28 +78,29 @@ def randomqueries():
     a=count
     countwithincache=0
     countwithindb=0
-    columns = ['time', 'latitude', 'longitude','mag']
+    columns = ['time','place', 'mag']
     execution_of_time_in_db=[]
     execution_of_time_in_cache=[]
 
-    val=float(minmag)
+    val=float(minlat)
     interval=[]
-    interval.append(minmag)
+    interval.append(minlat)
     
-    while val<maxmag:
+    while val<maxlat:
         val+=0.1
         interval.append(round(val,2))
     
     for i in range(0,len(interval)-1):
         cur = con.cursor()
-        # index=round((random.uniform(0,len(interval)-2)))
+        index=round((random.uniform(0,len(interval)-2)))
         while count>0:
             
             index=round((random.uniform(0,len(interval)-2)))
-            query="select time,latitude,longitude,mag from all_month where mag > "+str(interval[index])
+            print(interval[index],interval[index+1])
+            query="select \"time\",place,mag from quake where latitude >= "+str(interval[index])+" and latitude <= "+ str(interval[index+1])
             start=time.time()
             result = r.get(query)
-            
+            resultdata=[]
             
             if result is None:
                 print('in db')
@@ -107,6 +108,8 @@ def randomqueries():
                 cur=con.cursor()
                 cur.execute(query)
                 rows=list(cur.fetchall())
+                resultdata.append(rows)
+                print(rows)
                 end=time.time()
                 execution_of_time_in_db.append(end-start)
                 mem=[]
@@ -119,12 +122,15 @@ def randomqueries():
                 r.set(query,dumps(mem))
                 
                 countwithindb=countwithindb+1
+                
             else:
                 result=loads(result.decode("utf-8"))
+                print(result)
                 end=time.time()
                 execution_of_time_in_cache.append(end-start)
-                resultdisplay=result
+                resultdata.append(result)
                 print('in cache')
+                
                 
                 countwithincache=countwithincache+1
             count=count-1
@@ -137,7 +143,8 @@ def randomqueries():
     sum_dbtime=sum(execution_of_time_in_db)
     sum_cachetime=sum(execution_of_time_in_cache)
     con.close()
-    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=sum_dbtime,timecache=sum_cachetime)
+    print(query)
+    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=sum_dbtime,timecache=sum_cachetime,rows=resultdata)
 
 
 
