@@ -1,4 +1,18 @@
 <h2>search in magnitude</h2><br>
+        <form action="/createindex" method="POST" >
+            
+            <input type="submit" value="time display for creating table and indexes">
+        </form>
+
+        <form action="/randomqueries" method="POST" >
+            Enter maximum magnitude: <input type="text" name="maxmag">
+            Enter minimum magnitude: <input type="text" name="minmag">
+            Enter number of random queries: <input type="text" name="count">
+            <input type="submit" value="Search">
+         </form>
+
+
+
         <form action="/magnitude" method="POST" >
             Enter magnitude: <input type="text" name="mag">
             <input type="submit" value="Search">
