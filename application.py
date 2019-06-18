@@ -59,6 +59,13 @@ def createindex():
     con.close()
     return render_template('createindex.html',time=(end-start)*1000)
 
+
+@app.route('/flush',methods=['GET','POST'])
+def flush():
+    r = redis.StrictRedis(host=myHostname, port=6380,password=myPassword,ssl=True)
+    r.flushall()
+    return render_template('')
+
 @app.route('/randomqueries',methods=['GET','POST'])
 def randomqueries():
     con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")

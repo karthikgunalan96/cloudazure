@@ -1,9 +1,14 @@
+<h1>id:1001616138 name:Gunalan,Karthik</h1>
+
+
 <h2>search in magnitude</h2><br>
         <form action="/createindex" method="POST" >
             
             <input type="submit" value="time display for creating table and indexes">
         </form>
 
+        
+        <h2>random queries</h2><br>
         <form action="/randomqueries" method="POST" >
             Enter maximum magnitude: <input type="text" name="maxmag">
             Enter minimum magnitude: <input type="text" name="minmag">
@@ -12,8 +17,13 @@
          </form>
 
 
-
+         <h2>magnitude db and cache</h2><br>
         <form action="/magnitude" method="POST" >
             Enter magnitude: <input type="text" name="mag">
             <input type="submit" value="Search">
          </form>
+         <h2>flush all keys in cache</h2><br>
+         <form action="/flush" method="POST" >
+            
+            <input type="submit" value="flush all keys from cache">
+        </form>
