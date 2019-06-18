@@ -72,8 +72,8 @@ def flush():
 def randomqueries():
     con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     r = redis.StrictRedis(host=myHostname, port=6380,password=myPassword,ssl=True)
-    minmag = int(request.form['minmag'])
-    maxmag = int(request.form['maxmag'])
+    minlat = int(request.form['minlat'])
+    maxlat = int(request.form['maxlat'])
     count = int(request.form['count'])
     a=count
     countwithincache=0
@@ -97,13 +97,13 @@ def randomqueries():
             
             index=round((random.uniform(0,len(interval)-2)))
             query="select time,latitude,longitude,mag from all_month where mag > "+str(interval[index])
-            startmem=time.time()
+            start=time.time()
             result = r.get(query)
-            endmem=time.time()
-            execution_of_time_in_cache.append(endmem-startmem)
+            
+            
             if result is None:
                 print('in db')
-                start=time.time()
+                
                 cur=con.cursor()
                 cur.execute(query)
                 rows=list(cur.fetchall())
@@ -121,6 +121,8 @@ def randomqueries():
                 countwithindb=countwithindb+1
             else:
                 result=loads(result.decode("utf-8"))
+                end=time.time()
+                execution_of_time_in_cache.append(end-start)
                 resultdisplay=result
                 print('in cache')
                 
@@ -136,6 +138,82 @@ def randomqueries():
     sum_cachetime=sum(execution_of_time_in_cache)
     con.close()
     return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=sum_dbtime,timecache=sum_cachetime)
+
+
+
+@app.route('/latqueries',methods=['GET','POST'])
+def latqueries():
+    con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    r = redis.StrictRedis(host=myHostname, port=6380,password=myPassword,ssl=True)
+    minlat = int(request.form['minlat'])
+    maxlat = int(request.form['maxlat'])
+    # count = int(request.form['count'])
+    # a=count
+    # countwithincache=0
+    # countwithindb=0
+    columns = ['time', 'place','mag']
+    execution_of_time_in_db=[]
+    execution_of_time_in_cache=[]
+
+    # val=float(minmag)
+    # interval=[]
+    # interval.append(minmag)
+    
+    # while val<maxmag:
+    #     val+=0.1
+    #     interval.append(round(val,2))
+    
+    # for i in range(0,len(interval)-1):
+    #     cur = con.cursor()
+    #     # index=round((random.uniform(0,len(interval)-2)))
+    #     while count>0:
+            
+    # index=round((random.uniform(0,len(interval)-2)))
+    query="select \"time\",place,mag from quake where latitude > "+str(minlat)+" and latitude<"+str(maxlat)
+    start=time.time()
+    result = r.get(query)
+            
+            
+    if result is None:
+        print('in db')
+                
+        cur=con.cursor()
+        cur.execute(query)
+        rows=list(cur.fetchall())
+        print(rows)
+        result=rows
+        end=time.time()
+        execution_of_time_in_db.append(end-start)
+        mem=[]
+
+        for row in rows:
+            memdict=dict()
+            for j,val in enumerate(row):
+                memdict[columns[j]]=val
+            mem.append(memdict)
+        r.set(query,dumps(mem))
+                
+        # countwithindb=countwithindb+1
+    else:
+        print(result)
+        result=loads(result.decode("utf-8"))
+        end=time.time()
+        execution_of_time_in_cache.append(end-start)
+        resultdisplay=result
+        print('in cache')
+                
+        # countwithincache=countwithincache+1
+        # count=count-1
+                    
+    # probability_of_occurence_in_db=countwithindb/a
+    # probability_of_occurence_in_cache=countwithincache/a
+    # print("probability of query hitting db=",probability_of_occurence_in_db)
+    # print("probability of query hitting cache=",probability_of_occurence_in_cache)
+        # return render_template('magnitude2.html',rows=result,time=endmem-startmem)
+    sum_dbtime=sum(execution_of_time_in_db)
+    sum_cachetime=sum(execution_of_time_in_cache)
+    con.close()
+    return render_template('randomqueries.html',rows=result,timedb=sum_dbtime,timecache=sum_cachetime)
 
 
 
