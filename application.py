@@ -44,7 +44,7 @@ def createindex():
 
     con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     cur=con.cursor()
-    cur.execute("DROP TABLE assignment3.dbo.all_month2")
+    # cur.execute("DROP TABLE assignment3.dbo.all_month2")
     cur.execute("DROP INDEX all_month_mag__index on assignment3.dbo.all_month")
     cur.execute("DROP INDEX all_month_lat__index on assignment3.dbo.all_month")
     cur.execute("DROP INDEX all_month_long__index on assignment3.dbo.all_month")
