@@ -46,7 +46,7 @@ def createindex():
     cur=con.cursor()
     cur.execute("DROP TABLE assignment3.dbo.all_month2")
     start=time.time()
-    cur.execute("CREATE TABLE assignment3.dbo.all_month2(\"time\" DATETIME,latitude FLOAT,longitude FLOAT,depth FLOAT,mag FLOAT,magType TEXT,nst INT,gap INT,dmin FLOAT,rms FLOAT,net TEXT,id TEXT,updated DATETIME,place TEXT,type TEXT,horontalError FLOAT,depthError FLOAT,magError FLOAT,magNst INT,status TEXT,locationSource TEXT,magSource TEXT)")
+    # cur.execute("CREATE TABLE assignment3.dbo.all_month2(\"time\" DATETIME,latitude FLOAT,longitude FLOAT,depth FLOAT,mag FLOAT,magType TEXT,nst INT,gap INT,dmin FLOAT,rms FLOAT,net TEXT,id TEXT,updated DATETIME,place TEXT,type TEXT,horontalError FLOAT,depthError FLOAT,magError FLOAT,magNst INT,status TEXT,locationSource TEXT,magSource TEXT)")
     # cur.execute("CREATE INDEX all_month_mag__index ON assignment3.dbo.all_month (mag)")
     # cur.execute("CREATE INDEX all_month_lat__index ON assignment3.dbo.all_month (latitude)")
     # cur.execute("CREATE INDEX all_month_long__index ON assignment3.dbo.all_month (longitude)")
