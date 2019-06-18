@@ -119,7 +119,7 @@ def randomqueries():
     print("probability of query hitting cache=",probability_of_occurence_in_cache)
         # return render_template('magnitude2.html',rows=result,time=endmem-startmem)
 
-    
+    con.close()
     return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=execution_of_time_in_db,timecache=execution_of_time_in_cache)
 
 
