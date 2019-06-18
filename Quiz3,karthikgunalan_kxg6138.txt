@@ -1,0 +1,256 @@
+
+Name:karthik gunalan
+Last 4 digits ID:6138
+Computer IP address:
+CSE 6331, Cloud Computing					
+
+
+Quiz Q2, 3.30, Summer 2019   (c) DL, UTA, 2019
+
+
+  C&P means cut and paste only those relevant lines from your program(s) into this quiz.
+
+
+ 1.  I understand that I am on my honor during this quiz, I will not collaborate, use 
+     non-allowed sources, and I will not discuss or share this quiz with anyone for the next 
+     12 hours.
+     You MAY: use Google to search, use previous source code, 
+     YOU MAY NOT use:
+     Email, Facebook, Hangouts, IM, chats, Skype or ANY other human connection.
+
+     This is a timed test. Late tests will have points deducted for being late.
+     Very late tests will not be graded.
+
+     When you are complete, with any part, please raise your hand, so we may visually inspect that part.
+
+     The second part of the test, you should electronically submit, you will need to copy and paste 
+     only those lines of code to implement that part of the test, usually a few (two to eight) lines of code. 
+     Place it immediately after the question.
+
+     Submit this Quiz (renamed) with code cut and pasted, ONLY text. DO NOT submit zips, binaries, libraries,
+     or anything other than text.
+
+     When any parts(questions) are complete complete, submit this test, you may make multiple submissions.
+
+     If you have computer, or other, problems, please raise your hand immediately.
+
+     If you understand and agree, please initial here:
+     _____________kg____
+
+ 2. Get files from this same folder.
+   
+ 3. Name your program/submission with your name and last digits of your ID.
+
+ 4. Using the cloud services provider, all functionality possible should be implemented on that provider.
+    (Of course, displaying web pages through a browser and the user interface is "local")
+    The cloud service provider is MS Azure.
+
+ 4+. Please DO NOT "select" all tuples and then "filter" results, that is very inefficient and wastes time, 
+     "select" ONLY those tuples (rows) actually needed (for example with "where x>y" or similar).
+     In order to give as many people the opportunity to demo in the last few minutes, you may only demo ONE Question in the
+     last 5 minutes of the quiz time or for the few minutes afterward. 
+  
+Show and submit code, when each part is complete, raise your hand and then show us:
+
+azure sql database connection:
+con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+redis connection:
+
+myHostname = "karthikgunalancache.redis.cache.windows.net"
+myPassword = "E3eq1h2LCM0838QcfVlEVllZMy43kJw8qQFLan48jP4="
+r = redis.StrictRedis(host=myHostname, port=6380,password=myPassword,ssl=True)
+
+ 5. Show a web page and interface (which resides on the cloud provider) with your student ID followed by your
+    last name then comma then first name (as it appears on your student ID), in large font at the top of every web page displayed 
+    (for this quiz)
+    Upload the earthquake data ("quakes3") to cloud service, and import into a relational DB (SQL).
+    Then, below your name and ID, through a web interface (page), allow a user to give two latitude values (lat)  
+    (for example 3.0 and 5.0), and on the web page list each quake ONLY location (the name, the "place" location)
+    AND date and magnitude within that range. 
+python code:
+
+@app.route('/latqueries',methods=['GET','POST'])
+def latqueries():
+    con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    r = redis.StrictRedis(host=myHostname, port=6380,password=myPassword,ssl=True)
+    minlat = int(request.form['minlat'])
+    maxlat = int(request.form['maxlat'])
+    columns = ['time', 'place','mag']
+    execution_of_time_in_db=[]
+    execution_of_time_in_cache=[]
+     query="select \"time\",place,mag from quake where latitude > "+str(minlat)+" and latitude<"+str(maxlat)
+    start=time.time()
+    result = r.get(query)
+            
+            
+    if result is None:
+        print('in db')
+                
+        cur=con.cursor()
+        cur.execute(query)
+        rows=list(cur.fetchall())
+        print(rows)
+        result=rows
+        end=time.time()
+        execution_of_time_in_db.append(end-start)
+        mem=[]
+
+        for row in rows:
+            memdict=dict()
+            for j,val in enumerate(row):
+                memdict[columns[j]]=val
+            mem.append(memdict)
+        r.set(query,dumps(mem))
+                
+        # countwithindb=countwithindb+1
+    else:
+        print(result)
+        result=loads(result.decode("utf-8"))
+        end=time.time()
+        execution_of_time_in_cache.append(end-start)
+        resultdisplay=result
+        print('in cache')
+        sum_dbtime=sum(execution_of_time_in_db)
+    sum_cachetime=sum(execution_of_time_in_cache)
+    con.close()
+    return render_template('randomqueries.html',rows=result,timedb=sum_dbtime,timecache=sum_cachetime)
+html code:
+
+
+time for  query executing for the first time to fetch query from db={{timedb}}<br>
+time for query executing for the first time to fetch query from cache={{timecache}}<br>
+
+<table>
+        <tr>
+            <th>time</th>
+            <th>place</th>
+            <th>mag</th>
+            
+        </tr>
+        {% for row in rows %}
+            <tr>
+                <td>
+                    {{row['time']}}
+                </td>
+                <td>
+                    {{row['place']}}
+                </td>
+                <td>
+                    {{row['mag']}}
+                </td>
+    
+            </tr>
+    
+        {% endfor %}
+    </table>
+
+
+ 6. Through a web interface (page), allow a user to give you the number of times to do the "query", 
+    you will do the previous step 5 (part 5) that number of times, where the two lat values will be randomly chosen between 
+    those values given.
+    Then you will do that number of queries, each time generating new random value "pairs" within that range. 
+    (For example: the number of times, for instance 42 times, and we give you the range 3.0 and 5.0, you generate 
+    two random values within that range, for example 3.8 and 4.1, then 4.3 and 4.4, repeating 42 times.)
+    Then you will show: 
+    The number of matching tuples (results) EACH time through AND random values generated as well 
+    as the time taken to do EACH "random" query.
+   python code:
+    
+    while val<maxlat:
+        val+=0.1
+        interval.append(round(val,2))
+    
+    for i in range(0,len(interval)-1):
+        cur = con.cursor()
+        index=round((random.uniform(0,len(interval)-2)))
+        while count>0:
+            
+            index=round((random.uniform(0,len(interval)-2)))
+            print(interval[index],interval[index+1])
+            query="select \"time\",place,mag from quake where latitude >= "+str(interval[index])+" and latitude <= "+ str(interval[index+1])
+            start=time.time()
+            result = r.get(query)
+            resultdata=[]
+            
+            if result is None:
+                print('in db')
+                
+                cur=con.cursor()
+                cur.execute(query)
+                rows=list(cur.fetchall())
+                resultdata.append(rows)
+                print(rows)
+                end=time.time()
+                execution_of_time_in_db.append(end-start)
+                mem=[]
+
+                for row in rows:
+                    memdict=dict()
+                    for j,val in enumerate(row):
+                        memdict[columns[j]]=val
+                    mem.append(memdict)
+                r.set(query,dumps(mem))
+                
+                countwithindb=countwithindb+1
+                
+            else:
+                result=loads(result.decode("utf-8"))
+                print(result)
+                end=time.time()
+                execution_of_time_in_cache.append(end-start)
+                resultdata.append(result)
+                print('in cache')
+                
+                
+                countwithincache=countwithincache+1
+            count=count-1
+   probability_of_occurence_in_db=countwithindb/a
+    probability_of_occurence_in_cache=countwithincache/a
+ sum_dbtime=sum(execution_of_time_in_db)
+    sum_cachetime=sum(execution_of_time_in_cache)
+    con.close()
+    print(query)
+    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=sum_dbtime,timecache=sum_cachetime,rows=resultdata)
+
+html:
+
+
+
+probability of query hitting db={{probdb*100}}<br>
+probability of query hitting cache={{probcache*100}}<br>
+time for  query executing for the first time to fetch query from db={{timedb}}<br>
+time for query executing for the first time to fetch query from cache={{timecache}}<br>
+
+<table>
+        <tr>
+            <th>time</th>
+            <th>place</th>
+            <th>mag</th>
+            
+        </tr>
+        {% for row in rows %}
+            <tr>
+                <td>
+                    {{row['time']}}
+                </td>
+                <td>
+                    {{row['place']}}
+                </td>
+                <td>
+                    {{row['mag']}}
+                </td>
+    
+            </tr>
+    
+        {% endfor %}
+    </table>
+ 7. Repeat part 6 using an in-memory caching mechanism (NOT an in-memory database) repeat the previous step, then show us.
+above code 
+ 8. Repeat part 6, allow a user to either use an in-memory caching mechanism or none, and for ALL queries 
+    show ONLY cumulative time to do ALL queries.
+above code
+ 9. Show GTA parts 5, 6, 7, 8
+
+ 10. When complete, return (send) this quiz
+     If you finish early, send this immediately, otherwise send between
+     the end of class and no more than 1 minute after that.

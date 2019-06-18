@@ -75,6 +75,7 @@ def randomqueries():
     minlat = int(request.form['minlat'])
     maxlat = int(request.form['maxlat'])
     count = int(request.form['count'])
+    call=request.form['call']
     a=count
     countwithincache=0
     countwithindb=0
@@ -102,19 +103,19 @@ def randomqueries():
             result = r.get(query)
             resultdata=[]
             
-            if result is None:
+            if call =='db':
                 print('in db')
                 
                 cur=con.cursor()
                 cur.execute(query)
-                rows=list(cur.fetchall())
-                resultdata.append(rows)
-                print(rows)
+                result=list(cur.fetchall())
+                # resultdata.append(rows)
+                
                 end=time.time()
                 execution_of_time_in_db.append(end-start)
                 mem=[]
 
-                for row in rows:
+                for row in result:
                     memdict=dict()
                     for j,val in enumerate(row):
                         memdict[columns[j]]=val
@@ -122,10 +123,10 @@ def randomqueries():
                 r.set(query,dumps(mem))
                 
                 countwithindb=countwithindb+1
-                
+                return render_template('magnitude1.html',rows=result)
             else:
                 result=loads(result.decode("utf-8"))
-                print(result)
+                
                 end=time.time()
                 execution_of_time_in_cache.append(end-start)
                 resultdata.append(result)
@@ -134,7 +135,7 @@ def randomqueries():
                 
                 countwithincache=countwithincache+1
             count=count-1
-                    
+    print(result)
     probability_of_occurence_in_db=countwithindb/a
     probability_of_occurence_in_cache=countwithincache/a
     # print("probability of query hitting db=",probability_of_occurence_in_db)
@@ -144,7 +145,7 @@ def randomqueries():
     sum_cachetime=sum(execution_of_time_in_cache)
     con.close()
     print(query)
-    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=sum_dbtime,timecache=sum_cachetime,rows=resultdata)
+    return render_template('randomqueries.html',probdb=probability_of_occurence_in_db,probcache=probability_of_occurence_in_cache,timedb=sum_dbtime,timecache=sum_cachetime,rows=result)
 
 
 
