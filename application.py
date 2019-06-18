@@ -131,6 +131,7 @@ def randomqueries():
                 execution_of_time_in_cache.append(end-start)
                 resultdata.append(result)
                 print('in cache')
+                return render_template('magnitude2.html',rows=result)
                 
                 
                 countwithincache=countwithincache+1
