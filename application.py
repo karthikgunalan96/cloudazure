@@ -63,8 +63,8 @@ def createindex():
 @app.route('/flush',methods=['GET','POST'])
 def flush():
     r = redis.StrictRedis(host=myHostname, port=6380,password=myPassword,ssl=True)
-    r.flushall()
-    return render_template('')
+    r.delete('*')
+    return render_template('flush.html')
 
 @app.route('/randomqueries',methods=['GET','POST'])
 def randomqueries():
