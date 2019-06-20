@@ -322,7 +322,7 @@ def chart():
     val=start
     age_interval=[start]
     while val<end:
-        val+=a
+        val+=int(a)
         age_interval.append(val)
     # mem=[]
     per=[]
