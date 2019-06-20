@@ -322,7 +322,7 @@ def chart():
     val=start
     age_interval=[start]
     while val<end:
-        val+=10
+        val+=a
         age_interval.append(val)
     # mem=[]
     per=[]
@@ -343,7 +343,7 @@ def chart():
     result=list(cur.fetchall())
     for row in result:
         per.append(row[1]/row[0]*100)
-    print(age_interval)
+    # print(age_interval)
     # for i in range(0,len(per)-1):
     #     print(per[i])
     #     for j in range(0,len(age_interval)-1):
@@ -360,9 +360,10 @@ def chart():
                 # print(j)
                 # print(age_group)
                 if j>age_interval[i] and j<age_interval[i+1]:
-                    print(j)
+                    
                     memdict["age_group"]=age_group  
                     memdict["per"]=j
+                
                 mem.append(memdict)
             # print(mem)
     
