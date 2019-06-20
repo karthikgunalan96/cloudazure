@@ -309,23 +309,36 @@ port = int(os.getenv("PORT", 5000))
 
 @app.route('/')
 def hello_world():
+
+   
     con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
-    query="Select mag,latitude from quake where mag >= 6"
-    columns=['mag','latitude']
-    dic=dict()
+    query1="Select statename from voting where totalpop>5000 and totalpop<10000"
+    query2="Select statename from voting where totalpop>10000 and totalpop<50000"
     cur=con.cursor()
-    mem=[]
-    cur.execute(query)
-    result=list(cur.fetchall())
-    for row in result:
-        memdict=dict()
-        for j,val in enumerate(row):
-            memdict[columns[j]]=val
-        mem.append(memdict)
-    # print(mem)
-    a=[1,2,3,4,5]
-    # print(a)
-    return render_template('chart.html',a=mem,chart="bar")
+    cur.execute(query1)
+    result1=list(cur.fetchall())
+    cur.execute(query2)
+    result2=list(cur.fetchall())
+    print(result1)
+    print(result2)
+    return render_template('base.html',a=result1,b=result2)
+    # con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+    # query="Select mag,latitude from quake where mag >= 6"
+    # columns=['mag','latitude']
+    # dic=dict()
+    # cur=con.cursor()
+    # mem=[]
+    # cur.execute(query)
+    # result=list(cur.fetchall())
+    # for row in result:
+    #     memdict=dict()
+    #     for j,val in enumerate(row):
+    #         memdict[columns[j]]=val
+    #     mem.append(memdict)
+    # # print(mem)
+    # a=[1,2,3,4,5]
+    # # print(a)
+    # return render_template('chart.html',a=mem,chart="bar")
 
 # @app.route('/streaming.csv')
 # def streaming():
