@@ -10,7 +10,7 @@
    
         </head>
         <body>
-                <div id="chart"></div>
+                <div id="chartContainer"></div>
         <script type="text/javascript">
     if ("{{ chart }}" == "bar"){
             d3.selectAll("h1").style("color","red");
@@ -24,65 +24,56 @@
             var data = {{a|tojson|safe}};
             console.log(data);
             var chart = new dimple.chart(svg, data);
-            chart.addCategoryAxis("x", "latitude");
-            chart.addMeasureAxis("y", "mag");
-            chart.addSeries(null, dimple.plot.bar);
-            chart.addLegend(500, 20, 90, 300, "left");
-            chart.draw()
+            var x= chart.addCategoryAxis("x", "age_group");
+            var y=chart.addMeasureAxis("y", "count");
+            var s= chart.addSeries(null, dimple.plot.bar);
             
-
-            s.afterDraw = function (shape, data) {
-        // Get the shape as a d3 selection
-        var s = d3.select(shape),
-          rect = {
-            x: parseFloat(s.attr("x")),
-            y: parseFloat(s.attr("y")),
-            width: parseFloat(s.attr("width")),
-            height: parseFloat(s.attr("height"))
-          };
-        // Only label bars where the text can fit
-        if (rect.height >= 8) {
-          // Add a text label for the value
-          svg.append("text")
-            // Position in the centre of the shape (vertical position is
-            // manually set due to cross-browser problems with baseline)
-            .attr("x", rect.x + rect.width / 2)
-            .attr("y", rect.y + rect.height / 2 + 3.5)
-            // Centre align
-            .style("text-anchor", "middle")
-            .style("font-size", "10px")
-            .style("font-family", "sans-serif")
-            // Make it a little transparent to tone down the black
-            .style("opacity", 0.6)
-            // Prevent text cursor on hover and allow tooltips
-            .style("pointer-events", "none")
-            // Format the number
-            .text(d3.format(",.1f")(data.yValue / 1000) + "k");
-        }
-      };
-
+            s.afterDraw = function (shape, data) 
+            {
+              var shape = d3.select(shape);
+            svg.append("text")
+          .attr("x", parseFloat(shape.attr("x")) + shape.attr("width") / 2)
+          .attr("y", parseFloat(shape.attr("y")) + (shape.attr("height") > 30 ? (shape.attr("height") / 2 + 8) : - 10))
+          .style("font-family", "courier new")
+          .style("text-anchor", "middle")
+          .style("font-size", "16px")
+          .style("fill", "#ecf0f1")
+          .style("pointer-events", "none")
+          .text(y._getFormat()(data.yValue));
+        };
+        chart.draw()
+       
             }
             
     else if("{{ chart }}" == "pie")
     {
     
         var data = {{ a|tojson|safe }};
-    // var svg = dimple.newSvg("#chartContainer", 590, 400);
-    var svg = d3.select("body")
-                .append("svg")
-                .attr("width",10000)
-                .attr("height", 10000)
-                .attr("margin",200);
+    var svg = dimple.newSvg("#chartContainer", 1000, 1000);
+    // var svg = d3.select("body")
+    //             .append("svg")
+    //             .attr("width",10000)
+    //             .attr("height", 10000)
+    //             .attr("margin",200);
             
     
       var myChart = new dimple.chart(svg, data);
-      myChart.setBounds(20, 20, 460, 360)
-      myChart.addMeasureAxis("p", "latitude");
-      myChart.addSeries("mag", dimple.plot.pie);
-      myChart.addLegend(500, 20, 90, 300, "left");
+      myChart.setBounds(20, 20, 900, 900)
+      myChart.addMeasureAxis("p", "per");
+      rings=myChart.addSeries("age_group", dimple.plot.pie);
+      myChart.addLegend(900, 20, 90, 300, "right");
+      
+      
+      rings.afterDraw = function(shape, data) {
+        var bbox, ctm;
+        ctm = shape.getCTM();
+        bbox = shape.getBBox();
+        return this.chart.svg.append("text")
+          .attr("x", ctm.e + bbox.x + bbox.width/2)
+          .attr("y", ctm.f + bbox.y + bbox.height/2)
+          .text(Math.round(1000*data.piePct)/10 + "%");;
+      };
       myChart.draw();
-    
-
     }
 
 

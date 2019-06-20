@@ -1,67 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=
-    , initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-</head>
-<body>
-
 <h1>id:1001616138 name:Gunalan,Karthik</h1>
-<p>
-    first
-</p>
-<p>
-    second
-</p>
-{% for row in row%}
-<p>
-    {{row}}
-</p>
-{% endfor %}
-<h2>search in magnitude</h2><br>
-   
-<form action="/createindex" method="POST" >
-            
-            <input type="submit" value="time display for creating table and indexes">
-        </form>
-
-        
-        <h2>random queries</h2><br>
-        <form action="/latqueries" method="POST" >
-            Enter maximum latitude: <input type="text" name="maxlat">
-            Enter minimum latitude: <input type="text" name="minlat">
-            
-            <input type="submit" value="Search">
-         </form>
-         <h2>random queries db and cache</h2><br>
-         <form action="/randomqueries" method="POST" >
-            Enter maximum latitude: <input type="text" name="maxlat">
-            Enter minimum latitude: <input type="text" name="minlat">
-            Enter number of random queries: <input type="text" name="count">
-            enter 'cache' for from cache otherwise 'db' from db<input type="text" name="call">
-            <input type="submit" value="Search">
-         </form>
-
-         <h2>magnitude db and cache</h2><br>
-        <form action="/magnitude" method="POST" >
-            Enter magnitude: <input type="text" name="mag">
-            Enter number of random queries: <input type="text" name="count">
-            <input type="submit" value="Search">
-         </form>
-         <h2>flush all keys in cache</h2><br>
-         <form action="/flush" method="POST" >
-            
-            <input type="submit" value="flush all keys from cache">
-        </form>
-        <script src="https://d3js.org/d3.v5.min.js"></script>    
-        <script src="static/index.js"></script> 
-        
-</body>
-</html>
-
-
-
-
+<h2>queries</h2><br>
+<form action="/chart" method="POST" >
+    Enter interval: <input type="text" name="interval">
+    
+    
+    <input type="submit" value="Search">
+ </form>
