@@ -321,7 +321,7 @@ def hello_world():
     result2=list(cur.fetchall())
     print(result1)
     print(result2)
-    return render_template('base.html',a=result1,b=result2)``
+    return render_template('base.html',a=result1,b=result2)
     # con = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=tcp:karthikgunalan.database.windows.net,1433;Database=assignment3;Uid=karthikgunalan@karthikgunalan;Pwd={Polo5590};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     # query="Select mag,latitude from quake where mag >= 6"
     # columns=['mag','latitude']
