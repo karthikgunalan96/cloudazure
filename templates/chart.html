@@ -88,9 +88,9 @@
     var data = {{ a|tojson|safe }};
     var myChart = new dimple.chart(svg, data);
          myChart.setBounds(60, 30, 900, 500)
-           var x = myChart.addMeasureAxis("x", "latitude");
-           var y = myChart.addMeasureAxis("y", "mag");
-           myChart.addSeries(["latitude", "mag"], dimple.plot.bubble);
+           var x = myChart.addMeasureAxis("x", "x");
+           var y = myChart.addMeasureAxis("y", "y");
+           myChart.addSeries(["y", "x"], dimple.plot.bubble);
            myChart.addLegend(200, 10, 360, 20, "right");
            x.overrideMax = 50.00000000;
            x.overrideMin = -50.00000000;

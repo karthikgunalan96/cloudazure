@@ -310,6 +310,27 @@ port = int(os.getenv("PORT", 5000))
 def home():
     return render_template('home.html')
 
+
+@app.route('/scatterchart',methods=['GET','POST'])
+def chart1():
+    N1 = str(request.form['N1'])
+    N2 = str(request.form['N2'])
+    a=[]
+    memdict=dict()
+    mem=[]
+    for y in range(int(N1),int(N2)):
+        memdict=dict()
+        x=y*y+1 
+        memdict['x']=x
+        memdict['y']=y
+        mem.append(memdict)
+    print(mem)
+  
+    
+        
+    
+    return render_template('chart.html',a=mem,chart="scatter")
+
 @app.route('/chart',methods=['GET','POST'])
 def chart():
   
